@@ -53,6 +53,10 @@
             ## msg: '{{ansible_facts}}' si pongo var (que es un parámetro de msg, no hace falta {{}})
             var: ansible_facts.dns.nameservers[0]
             
+        # ansible ubuntu01 -i ejercicios/inventarios/inventario1.yml -m setup -u root  --> para sacar los facts por comando
+            
+  #Tareas CONDICIONALES
+        
         #Mi primera tarea CONDICIONAL
         - name: Mi tarea condicional
           debug:
@@ -66,19 +70,89 @@
         #Una tarea normalita
         - name: Mi tarea normalita
           debug:
-            msg: 'Me ejecuto normalmente'
+            msg: 'Me ejecuto normalmente 1'
           changed_when: False
           notify: Tarea opcional 1 #Nombre de la tarea que se va a ejecutar
           
         #Una tarea normalita
         - name: Mi tarea normalita
           debug:
-            msg: 'Me ejecuto normalmente'
+            msg: 'Me ejecuto normalmente 2'
           changed_when: True
           ##notify: Tarea opcional 2 #Nombre de la tarea que se va a ejecutar    
           notify: mievento #un evento. La condicionales se apuntan a este evento para ejecutarse 
   
+        #Una tarea que explota
+        - name: Mi tarea explosiva
+          shell:
+            cmd: umane
+          ignore_errors: True
+          failed_when: explosiva.rc > 100
+          register: explosiva #Le pongo un nombre a la tarea como si fuera una variable (contendrá las propiedades de la tarea)
+
+        #Una tarea tras explosión
+        - name: Otra tarea
+          debug:
+            ##msg: 'Voy detrás de la explosión'
+            ##msg: 'Me ejecuto después de explosiva'
+            msg: '{{explosiva.stdout}}'
+          when:
+            explosiva.rc == 0
+            
+          #Expresiones para utilizar en los when: when, failed_when, changed_when
+          #
+          #Expresiones sobre tareas que se han ejecutado
+          # explosiva es failed
+          # explosiva is succeeded
+          # explosiva is skipped
+          # explosiva is changed
+          
+          #Otras expresiones útiles sobre variables (incluyendo tareas que se hayan ejecutado)
+          # mivariable is defined
+          # mivariable is undefined or mivariable == False
+
+        #Tarea comprobadora
+        - name: Una tarea que comprueba un texto
+          debug:
+            msg: La salida de error de la tarea explosiva contiene 'not found'
+          when:
+            #"'not found' in explosiva.stderr"
+            #explosiva.stderr is match(".*not.*")
+            explosiva.stderr is search("n.t f..nd")
+            
+          #Nuestra primera tarea en bucle
+        - name: Primer bucle
+          debug:
+            msg: 'Veamos los CPs: {{item | upper}}'
+          loop: '{{ansible_facts.processor}}'
+          loop_cotrol:
+            index_var: cpus
+          when: (cpus+1) % 3 == 0
+          #when: ansible_loop.index % 3 == 0  Nos falla por la versión de Ansible
+          
+          # Filtros jinja2
+          # abs, attr, batch, capitalize, center, default, dictsort, escape, filesizeformat, first, float, forceescape, format, 
+          # groupby, indent, int, join, last, length, list, lower, map, max, min, pprint, random, reject, rejectattr, replace, 
+          # reverse, round, safe, select, selectattr, slice, sort, string, striptags, sum, title, tojson, trim, truncate, unique, 
+          # upper, urlencode, urlize, wordcount, wordwrap, xmlattr
+          #
+          # Uso {{ variable | upper }}
+          #
+          # https://jinja.palletsprojects.com/en/2.11.x/templates/#builtin-filters
+
   
+          # Variables dentro de loops. Requiere Ansible 2.8
+          # ansible_loop.allitems       La lista de todos los elementos en el bucle
+          # ansible_loop.index          La iteración actual del bucle. (comenzando en 1)
+          # ansible_loop.index0         La iteración actual del bucle. (comenzando en 0)
+          # ansible_loop.revindex       El número de iteraciones hasta acabar el bucle (comenzando en 1)
+          # ansible_loop.revindex0      El número de iteraciones hasta acabar el bucle (comenzando en 0)
+          # ansible_loop.first          Verdadero si es la primera iteración
+          # ansible_loop.last           Verdadero si es la última iteración
+          # ansible_loop.length         El número de elementos en el bucle
+          # ansible_loop.previtem       El elemento de la iteración anterior del bucle. Indefinido durante la primera iteración.
+          # ansible_loop.nextitem       El elemento de la siguiente iteración del bucle. Indefinido durante la última iteración.
+
   
   #Al final del fichero
   handlers:
