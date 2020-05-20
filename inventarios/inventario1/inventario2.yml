@@ -1,0 +1,10 @@
+all:
+    hosts:
+        ubuntu01: # Podría ser ubuntu0[1:2] y hacerlo en una sola línea
+        # A nivel de host no hace falta poner vars para definir variables
+            sistema2: 18.04
+        ubuntu02:
+            sistema2: 16.04
+    # Definir variables a nivel de grupo sí hace falta poner vars
+    vars:
+        sistema: Ubuntu

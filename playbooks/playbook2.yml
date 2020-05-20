@@ -1,0 +1,7 @@
+- hosts: all #Alias de grupo o de servidor
+#Opciones de conexión
+  remote_user: root
+#Tareas
+  tasks:
+   - name: Actualizar
+     apt: state=latest
