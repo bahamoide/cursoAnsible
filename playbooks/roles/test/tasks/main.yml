@@ -1,0 +1,12 @@
+---
+# TASKS file for test
+- name: Primera tarea del rol
+  debug:
+    msg: 'Soy la primera tarea del rol {{nombre_del_rol}}'
+    
+- name: Segunda tarea del rol
+  debug:
+    msg: 'Soy la segunda tarea'
+  changed_when: True
+  notify: mievento1
+  #become: True #lanza la tarea como root

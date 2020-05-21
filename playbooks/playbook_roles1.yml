@@ -1,0 +1,6 @@
+- hosts: ubuntu01
+#Opciones de conexión
+  remote_user: root
+#Tareas
+  roles:
+    - test

@@ -1,0 +1,5 @@
+---
+# VARS file for nginx
+    nginx_port: 81
+    nginx_server: localhost
+    nginx_web_path: /www

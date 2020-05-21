@@ -4,4 +4,4 @@
 #Tareas
   tasks:
    - name: Actualizar
-     apt: state=latest
+     apt: state=latest  # Sin acabar
