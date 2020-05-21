@@ -5,7 +5,7 @@
 - hosts: ubuntu01
   remote_user: root
   
-  var:
+  vars:
     nginx_port: 81
     nginx_server: ubuntu01
     nginx_web_path: /web
@@ -28,6 +28,21 @@
      # Puerto 81
      # Ruta donde está la web: -> /web
 #Paso 4: Playbook
- # Pongains valora nuevos para las variables 
+ # Pongains valores nuevos para las variables 
    # ruta_web: /web
    # puerto: 81
+   
+   
+ 
+# Más tareas   
+# 1- Organizar las tasks
+    # Instalaciones
+    # Configuraciones / Post instalaciones
+    # Inicio Servicios
+    
+# 2- Comprobaciones del programa
+    # assert
+    # curl puertecito: texto -> html cuadra con el fichero (texto)
+
+# 3- Repositorio como privado: index.html
+ 

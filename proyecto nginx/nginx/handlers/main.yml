@@ -1,11 +1,6 @@
 ---
 # HANDLERS file for nginx
-- name: Tarea postinstalación 3 #Iniciar servicio del nginx
-  service:
-    name: nginx
-    state: started
-  listen: nginx_instalado
-  
+
 - name: Tarea postinstalación 4 #Iniciar servicio del nginx
   service:
     name: nginx

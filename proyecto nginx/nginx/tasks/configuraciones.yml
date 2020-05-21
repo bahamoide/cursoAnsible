@@ -1,0 +1,11 @@
+- name: Tarea postinstalación 1 #Copiar la configuración de nginx
+  template:
+    src: templates/minginx.conf
+    dest: /etc/nginx/conf.d/minginx.conf
+    mode: '0400'
+  notify: nginx_reconfigurado
+  
+- name: Tarea postinstalación 2 #Clonar el web
+  git:
+    repo: 'https://bahamoide:{{password_github}}@github.com/bahamoide/repo_superejercicio'
+    dest: '{{nginx_web_path}}'

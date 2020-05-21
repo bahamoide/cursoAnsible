@@ -1,34 +1,6 @@
 ---
 # TASK file for nginx
-- name: Tarea preinstalación 1 #Actualizar el apt
-  apt:
-    update_cache: True
-  
-- name: Tarea preinstalación 2 #Instalar curl
-  apt:
-    name: curl
-    state: latest
-
-- name: Tarea preinstalación 3 #Instalar git
-  apt:
-    name: git
-    state: latest
-
-- name: Tarea instalación 1 #Instalar nginx con apt
-  apt:
-    name: ngix
-    state: latest
-  notify: nginx_instalado
-  
-- name: Tarea postinstalación 1 #Copiar la configuración de nginx
-  template:
-    src: templates/minginx.conf
-    dest: /etc/nginx/conf.d/minginx.conf
-    mode: '0400'
-  notify: nginx_reconfigurado
-  
-- name: Tarea postinstalación 2 #Clonar el web
-  git:
-    repo: 'https://github.com/bahamoide/repo_superejercicio'
-    dest: '{{nginx_web_path}}'
-  
+- import_tasks: instalaciones.yml
+- import_tasks: configuraciones.yml
+- import_tasks: servicios.yml
+- import_tasks: comprobaciones.yml
